@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Seventy Times Seven - Biblical Forgiveness Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #6B46C1;
+            --secondary: #9333EA;
+            --accent: #F59E0B;
+            --light: #FAF5FF;
+            --dark: #1E0A3C;
+            --text: #4A5568;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            overflow-x: hidden;
+            padding-bottom: 70px;
+            min-height: 100vh;
+        }
+        
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+            min-height: calc(100vh - 70px);
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header Styles */
+        .header {
+            background: var(--gradient);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Audio Toggle */
+        .audio-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.3);
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .audio-toggle:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.1);
+        }
+        
+        .audio-toggle.playing {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text);
+        }
+        
+        .nav-item:hover {
+            color: var(--primary);
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 3px;
+        }
+        
+        .nav-label {
+            font-size: 0.75rem;
+            display: block;
+        }
+        
+        /* Content Container */
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Welcome Screen Styles */
+        .welcome-hero {
+            background: var(--gradient);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 0 0 50px 50px;
+        }
+        
+        .welcome-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .welcome-hero .verse {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        
+        .welcome-hero .reference {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .card p {
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(107, 70, 193, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-full {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        /* Journey Card */
+        .journey-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .journey-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .journey-card .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 10px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .journey-card .progress-fill {
+            background: white;
+            height: 100%;
+            width: 0%;
+            transition: width 1s ease;
+            border-radius: 10px;
+        }
+        
+        /* Assessment Styles */
+        .assessment-question {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .assessment-question h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .assessment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .assessment-option {
+            padding: 15px;
+            background: var(--light);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .assessment-option:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .assessment-option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Devotional Styles */
+        .devotional {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .devotional h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .devotional .scripture {
+            background: var(--light);
+            padding: 20exchanges;
+            border-left: 4px solid var(--primary);
+            margin: 20px 0;
+            font-style: italic;
+            line-height: 1.8;
+        }
+        
+        .devotional .reflection {
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+        
+        .devotional .prayer {
+            background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        /* Exercise Styles */
+        .exercise {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid var(--primary);
+        }
+        
+        .exercise h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .exercise-step {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .exercise-step h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        /* Journal Styles */
+        .journal-entry {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .journal-prompt {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .journal-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+        
+        .journal-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+        }
+        
+        /* Testimony Styles */
+        .testimony {
+            background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .testimony h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .testimony .author {
+            color: var(--secondary);
+            font-style: italic;
+            margin-top: 15px;
+        }
+        
+        /* Crisis Support */
+        .crisis-banner {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .crisis-banner h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        /* Resource List */
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .resource-item {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .resource-item h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .resource-item p {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-top: 5px;
+        }
+        
+        /* Progress Tracker */
+        .progress-tracker {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .progress-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: 600;
+            color: var(--primary);
+            border: 3px solid var(--primary);
+        }
+        
+        .progress-circle.completed {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .progress-text {
+            flex: 1;
+        }
+        
+        .progress-text h4 {
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+        
+        .progress-text p {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text);
+        }
+        
+        .empty-state h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .welcome-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="data:audio/mpeg;base64,SUQzAwAAAAAAA..." type="audio/mpeg">
+    </audio>
+    
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen active">
+        <div class="welcome-hero">
+            <h1>Seventy Times Seven</h1>
+            <div class="verse">
+                "Then Peter came to Jesus and asked, 'Lord, how many times shall I forgive my brother or sister who sins against me? Up to seven times?' Jesus answered, 'I tell you, not seven times, but seventy times seven.'"
+                <div class="reference">Matthew 18:21-22</div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1.1rem;">A Biblical Journey Through Forgiveness, Healing, and Reconciliation</p>
+        </div>
+        
+        <div class="content">
+            <div class="card">
+                <h3>Welcome, Beloved</h3>
+                <p>You've taken a courageous step. Whether you're struggling to forgive someone who hurt you deeply, wrestling with bitterness, or seeking to reconcile a broken relationship, God meets you here with infinite grace and understanding.</p>
+            </div>
+            
+            <div class="card">
+                <h3>This Journey Is For You If...</h3>
+                <p>• You're carrying the weight of unforgiveness<br>
+                   • Bitterness has taken root in your heart<br>
+                   • You've been deeply betrayed or wounded<br>
+                   • You struggle to forgive yourself<br>
+                   • You long for reconciliation but don't know how<br>
+                   • You want to break free from cycles of hurt</p>
+            </div>
+            
+            <div class="card">
+                <h3>What You'll Find Here</h3>
+                <p>• Biblical teachings on forgiveness<br>
+                   • Practical forgiveness exercises<br>
+                   • Daily devotionals and prayers<br>
+                   • Personal assessment tools<br>
+                   • Stories of transformation<br>
+                   • Crisis support for deep pain<br>
+                   • Private journal for your journey</p>
+            </div>
+            
+            <button class="btn btn-full" onclick="showScreen('homeScreen')">Begin Your Journey</button>
+            
+            <div class="crisis-banner">
+                <h3>Need Immediate Support?</h3>
+                <p>If you are in crisis, please contact your local helpline for immediate support. You are not alone.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Home Screen -->
+    <div id="homeScreen" class="screen">
+        <div class="header">
+            <h1>Your Forgiveness Journey</h1>
+            <p>Transform hurt into healing</p>
+            <button class="audio-toggle" onclick="toggleAudio()" id="audioToggle">
+                <span id="audioIcon">♪</span>
+            </button>
+        </div>
+        
+        <div class="content">
+            <div class="journey-card">
+                <h2>Day <span id="journeyDay">1</span> of Your Journey</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p>Progress: <span id="progressPercent">0</span>%</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="devotionalCount">0</div>
+                    <div class="stat-label">Devotionals Read</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="exerciseCount">0</div>
+                    <div class="stat-label">Exercises Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="journalCount">0</div>
+                    <div class="stat-label">Journal Entries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="prayerCount">0</div>
+                    <div class="stat-label">Prayers Offered</div>
+                </div>
+            </div>
+            
+            <button class="btn btn-full" onclick="showScreen('assessmentScreen')">Take Forgiveness Assessment</button>
+            <button class="btn btn-secondary btn-full" onclick="showScreen('devotionalScreen')">Today's Devotional</button>
+            <button class="btn btn-secondary btn-full" onclick="showScreen('exerciseScreen')">Forgiveness Exercises</button>
+            <button class="btn btn-secondary btn-full" onclick="showScreen('journalScreen')">Prayer Journal</button>
+            <button class="btn btn-secondary btn-full" onclick="showScreen('testimonyScreen')">Stories of Hope</button>
+        </div>
+    </div>
+    
+    <!-- Assessment Screen -->
+    <div id="assessmentScreen" class="screen">
+        <div class="header">
+            <h1>Forgiveness Assessment</h1>
+            <p>Understanding your journey</p>
+        </div>
+        
+        <div class="content">
+            <div class="assessment-question">
+                <h3>How would you describe your current struggle with forgiveness?</h3>
+                <div class="assessment-options">
+                    <div class="assessment-option" onclick="selectOption(this, 'struggle')">
+                        I was deeply hurt and can't let go of the pain
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'struggle')">
+                        I want to forgive but don't know how
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'struggle')">
+                        I've forgiven but still feel angry
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'struggle')">
+                        I can't forgive myself for what I've done
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'struggle')">
+                        I'm struggling with multiple relationships
+                    </div>
+                </div>
+            </div>
+            
+            <div class="assessment-question">
+                <h3>How long have you been carrying this burden?</h3>
+                <div class="assessment-options">
+                    <div class="assessment-option" onclick="selectOption(this, 'duration')">
+                        Less than a month
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'duration')">
+                        1-6 months
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'duration')">
+                        6 months to a year
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'duration')">
+                        1-5 years
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'duration')">
+                        More than 5 years
+                    </div>
+                </div>
+            </div>
+            
+            <div class="assessment-question">
+                <h3>What emotions are you experiencing most?</h3>
+                <div class="assessment-options">
+                    <div class="assessment-option" onclick="selectOption(this, 'emotion')">
+                        Anger and rage
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'emotion')">
+                        Deep sadness and grief
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'emotion')">
+                        Betrayal and distrust
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'emotion')">
+                        Shame and guilt
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'emotion')">
+                        Numbness and disconnection
+                    </div>
+                </div>
+            </div>
+            
+            <div class="assessment-question">
+                <h3>What is your goal for this journey?</h3>
+                <div class="assessment-options">
+                    <div class="assessment-option" onclick="selectOption(this, 'goal')">
+                        To find peace and let go of pain
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'goal')">
+                        To restore a broken relationship
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'goal')">
+                        To forgive myself and move forward
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'goal')">
+                        To understand biblical forgiveness
+                    </div>
+                    <div class="assessment-option" onclick="selectOption(this, 'goal')">
+                        To break free from bitterness
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-full" onclick="processAssessment()">Get Your Personalized Path</button>
+            
+            <div id="assessmentResults" style="display: none;">
+                <div class="card" style="background: var(--gradient); color: white; margin-top: 30px;">
+                    <h3>Your Personalized Forgiveness Path</h3>
+                    <p id="assessmentSummary"></p>
+                    <p style="margin-top: 15px;">Remember: Forgiveness is a journey, not a destination. God walks with you every step of the way.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Devotional Screen -->
+    <div id="devotionalScreen" class="screen">
+        <div class="header">
+            <h1>Daily Devotional</h1>
+            <p>Scripture, reflection, and prayer</p>
+        </div>
+        
+        <div class="content">
+            <div class="devotional" id="devotional1">
+                <h2>The Heart of Forgiveness</h2>
+                <div class="scripture">
+                    "Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you." - Colossians 3:13
+                </div>
+                <div class="reflection">
+                    <p>Forgiveness begins not with our strength, but with remembering how much we've been forgiven. When we grasp the depth of God's forgiveness toward us—complete, undeserved, costly—we find the wellspring from which our own forgiveness flows.</p>
+                    
+                    <p>This doesn't minimize the hurt you've experienced. God sees your pain. He knows the sleepless nights, the replaying of wounds, the struggle to let go. He doesn't ask you to pretend it didn't happen or that it didn't matter. Instead, He invites you to bring your honest hurt to Him.</p>
+                    
+                    <p>Today, consider this: What if forgiveness isn't about them deserving it, but about you deserving freedom? What if it's God's gift to you, not to them?</p>
+                </div>
+                <div class="prayer">
+                    Father, I come to You with my wounded heart. You know the depth of my hurt, the weight of what I carry. Help me to remember how completely You've forgiven me. Give me Your strength to take the first step toward forgiveness. Not because they deserve it, but because You've already paid the price. Show me that forgiveness is the pathway to my freedom. In Jesus' name, Amen.
+                </div>
+                <button class="btn btn-full" onclick="completeDevotional(1)">Mark as Complete</button>
+            </div>
+            
+            <div class="devotional" id="devotional2" style="display: none;">
+                <h2>When Forgiveness Feels Impossible</h2>
+                <div class="scripture">
+                    "Jesus looked at them and said, 'With man this is impossible, but with God all things are possible.'" - Matthew 19:26
+                </div>
+                <div class="reflection">
+                    <p>Some wounds run so deep that forgiveness feels like betrayal of our own pain. "How can I forgive this?" we cry. "It's too much, too devastating, too wrong." If you're feeling this today, know that Jesus understands.</p>
+                    
+                    <p>On the cross, Jesus forgave those who were actively crucifying Him. Not because they asked for it. Not because they deserved it. But because forgiveness is the nature of divine love. And that same Spirit lives in you.</p>
+                    
+                    <p>Forgiveness doesn't happen in our own strength. It's a supernatural work of God's Spirit. Your part is willingness—even reluctant willingness. God's part is the miracle of transformation.</p>
+                </div>
+                <div class="prayer">
+                    Lord Jesus, forgiveness feels impossible right now. The hurt is too deep, the betrayal too real. I don't have the strength to forgive on my own. I'm bringing You my tiny seed of willingness—it's all I have. Take it and grow it into something beautiful. Do in me what only You can do. Transform my heart. In Your mighty name, Amen.
+                </div>
+                <button class="btn btn-full" onclick="completeDevotional(2)">Mark as Complete</button>
+            </div>
+            
+            <div class="devotional" id="devotional3" style="display: none;">
+                <h2>Forgiveness Doesn't Mean Reconciliation</h2>
+                <div class="scripture">
+                    "If it is possible, as far as it depends on you, live at peace with everyone." - Romans 12:18
+                </div>
+                <div class="reflection">
+                    <p>One of the most freeing truths about forgiveness is this: you can forgive someone without reconciling with them. Forgiveness is your journey with God. Reconciliation requires two willing hearts and often, safe boundaries.</p>
+                    
+                    <p>Some relationships can be restored beautifully. Others need to remain at a distance for your safety and wellbeing. God doesn't require you to trust someone who has proven untrustworthy. He doesn't ask you to put yourself back in harm's way.</p>
+                    
+                    <p>Forgiveness releases them to God's hands and releases you from the prison of bitterness. But wisdom determines what the relationship looks like going forward.</p>
+                </div>
+                <div class="prayer">
+                    Wise Father, give me discernment to know the difference between forgiveness and reconciliation. Help me to forgive freely while maintaining healthy boundaries. Show me when restoration is possible and when distance is wisdom. Guide me to relationships that are safe and life-giving. In Jesus' name, Amen.
+                </div>
+                <button class="btn btn-full" onclick="completeDevotional(3)">Mark as Complete</button>
+            </div>
+            
+            <div class="devotional" id="devotional4" style="display: none;">
+                <h2>Forgiving Yourself</h2>
+                <div class="scripture">
+                    "Therefore, there is now no condemnation for those who are in Christ Jesus." - Romans 8:1
+                </div>
+                <div class="reflection">
+                    <p>Sometimes the hardest person to forgive is the one in the mirror. You replay your failures, punish yourself with shame, and refuse the grace you'd freely give to others. But beloved, if God has forgiven you, who are you to withhold forgiveness from yourself?</p>
+                    
+                    <p>Self-forgiveness isn't saying what you did was okay. It's agreeing with God that the price has been paid. It's stepping out of the courtroom where you've been both prosecutor and defendant, and accepting the Judge's verdict: NOT GUILTY.</p>
+                    
+                    <p>Your past doesn't define you. Your mistakes don't own you. You are not what you've done; you are who God says you are: forgiven, beloved, redeemed.</p>
+                </div>
+                <div class="prayer">
+                    Merciful God, I've been so hard on myself, carrying shame You never asked me to bear. Help me to forgive myself as completely as You've forgiven me. Remove the condemning voices in my head and replace them with Your voice of love. I receive Your forgiveness and extend it to myself. In Jesus' name, Amen.
+                </div>
+                <button class="btn btn-full" onclick="completeDevotional(4)">Mark as Complete</button>
+            </div>
+            
+            <div class="devotional" id="devotional5" style="display: none;">
+                <h2>The Freedom of Forgiveness</h2>
+                <div class="scripture">
+                    "It is for freedom that Christ has set us free. Stand firm, then, and do not let yourselves be burdened again by a yoke of slavery." - Galatians 5:1
+                </div>
+                <div class="reflection">
+                    <p>Unforgiveness is a prison where you are both the guard and the prisoner. Every day you hold the keys, but fear keeps you from using them. What if forgiveness doesn't mean they win? What if it means you're finally free?</p>
+                    
+                    <p>Forgiveness breaks the chains that bind you to the person who hurt you. It ends their power over your emotions, your peace, your future. It says, "You no longer own any part of me. I'm giving this to God and walking free."</p>
+                    
+                    <p>Freedom doesn't come all at once. It comes in moments of choice, daily decisions to release instead of rehearse, to bless instead of curse, to heal instead of hate. Each choice is a step toward the freedom Christ died to give you.</p>
+                </div>
+                <div class="prayer">
+                    Freedom-giving God, I'm tired of being chained to this hurt. I want the freedom You promise. Help me to use the keys You've given me. Show me that forgiveness isn't letting them win—it's letting myself live. Break every chain that binds me. I choose freedom today. In Jesus' liberating name, Amen.
+                </div>
+                <button class="btn btn-full" onclick="completeDevotional(5)">Mark as Complete</button>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="btn btn-secondary" onclick="previousDevotional()" id="prevDevBtn" style="display: none;">← Previous</button>
+                <button class="btn btn-secondary" onclick="nextDevotional()" id="nextDevBtn">Next →</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Exercise Screen -->
+    <div id="exerciseScreen" class="screen">
+        <div class="header">
+            <h1>Forgiveness Exercises</h1>
+            <p>Practical steps toward healing</p>
+        </div>
+        
+        <div class="content">
+            <div class="exercise">
+                <h3>Exercise 1: The Empty Chair</h3>
+                <p>This powerful exercise helps you express feelings you may not be able to share directly.</p>
+                <div class="exercise-step">
+                    <h4>Step 1: Prepare</h4>
+                    <p>Place an empty chair across from you. Imagine the person you need to forgive sitting there. Take deep breaths and invite God's presence.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 2: Express</h4>
+                    <p>Tell them how their actions affected you. Be completely honest about your hurt, anger, and pain. Don't hold back—God can handle your raw emotions.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 3: Release</h4>
+                    <p>Say out loud: "With God's help, I choose to forgive you. I release you and this hurt to God. You no longer have power over my peace."</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 4: Pray</h4>
+                    <p>Ask God to bless them (even if you don't feel it yet). This shifts the power from bitterness to blessing.</p>
+                </div>
+                <button class="btn btn-success" onclick="completeExercise(1)">Complete Exercise</button>
+            </div>
+            
+            <div class="exercise">
+                <h3>Exercise 2: The Letter You'll Never Send</h3>
+                <p>Writing can unlock emotions and bring clarity to confusion.</p>
+                <div class="exercise-step">
+                    <h4>Step 1: Write Freely</h4>
+                    <p>Write a letter to the person who hurt you. Pour out everything—your pain, questions, anger, and confusion. This is for your healing, not for sending.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 2: Write from Their Perspective</h4>
+                    <p>Try writing a letter from their perspective to you. This isn't excusing their behavior, but it might help you see their humanity.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 3: Write God's Letter to You</h4>
+                    <p>Write what you think God would say to you about this situation. Include His love, understanding, and desire for your freedom.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 4: Ceremony of Release</h4>
+                    <p>Safely burn the first letter or tear it into small pieces while praying. This symbolizes releasing the hurt to God.</p>
+                </div>
+                <button class="btn btn-success" onclick="completeExercise(2)">Complete Exercise</button>
+            </div>
+            
+            <div class="exercise">
+                <h3>Exercise 3: The Forgiveness Prayer Practice</h3>
+                <p>A daily practice that gradually softens your heart.</p>
+                <div class="exercise-step">
+                    <h4>Week 1: Pray for Yourself</h4>
+                    <p>"God, heal my heart. Give me Your strength. Help me want to forgive."</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Week 2: Neutral Prayer</h4>
+                    <p>"God, You know [person's name]. You love them. Do what only You can do."</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Week 3: Blessing Prayer</h4>
+                    <p>"God, bless [person's name]. Meet their deepest needs. Lead them to Your truth."</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Week 4: Release Prayer</h4>
+                    <p>"God, I release [person's name] to You. I forgive as You have forgiven me. Set us both free."</p>
+                </div>
+                <button class="btn btn-success" onclick="completeExercise(3)">Complete Exercise</button>
+            </div>
+            
+            <div class="exercise">
+                <h3>Exercise 4: The Stone Ceremony</h3>
+                <p>A physical act that represents spiritual release.</p>
+                <div class="exercise-step">
+                    <h4>Step 1: Find Your Stone</h4>
+                    <p>Find a stone that fits in your hand. This represents the weight of unforgiveness you've been carrying.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 2: Carry It</h4>
+                    <p>Carry the stone with you for a day. Feel its weight. Notice how it affects you. This is what unforgiveness does to your soul.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 3: Write and Attach</h4>
+                    <p>Write the person's name or the hurt on paper. Attach it to the stone.</p>
+                </div>
+                <div class="exercise-step">
+                    <h4>Step 4: Release Ceremony</h4>
+                    <p>Go to a body of water or a special place. Pray, then throw the stone as far as you can, symbolizing your release of the burden.</p>
+                </div>
+                <button class="btn btn-success" onclick="completeExercise(4)">Complete Exercise</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Journal Screen -->
+    <div id="journalScreen" class="screen">
+        <div class="header">
+            <h1>Prayer Journal</h1>
+            <p>Your private space for reflection</p>
+        </div>
+        
+        <div class="content">
+            <div class="journal-entry">
+                <div class="journal-prompt">Today's Prompt: What would freedom from unforgiveness look like in your life?</div>
+                <textarea class="journal-textarea" id="journal1" placeholder="Write your thoughts here..." onchange="saveJournal()"></textarea>
+            </div>
+            
+            <div class="journal-entry">
+                <div class="journal-prompt">What emotions am I feeling today about forgiveness?</div>
+                <textarea class="journal-textarea" id="journal2" placeholder="Be honest with your feelings..." onchange="saveJournal()"></textarea>
+            </div>
+            
+            <div class="journal-entry">
+                <div class="journal-prompt">Write a prayer asking God for help with forgiveness:</div>
+                <textarea class="journal-textarea" id="journal3" placeholder="Dear God..." onchange="saveJournal()"></textarea>
+            </div>
+            
+            <div class="journal-entry">
+                <div class="journal-prompt">What small step toward forgiveness can I take today?</div>
+                <textarea class="journal-textarea" id="journal4" placeholder="One small step..." onchange="saveJournal()"></textarea>
+            </div>
+            
+            <div class="journal-entry">
+                <div class="journal-prompt">Free Writing Space:</div>
+                <textarea class="journal-textarea" id="journal5" placeholder="Write anything on your heart..." style="min-height: 250px;" onchange="saveJournal()"></textarea>
+            </div>
+            
+            <button class="btn btn-full" onclick="saveJournal(); showMessage('Journal saved!')">Save All Entries</button>
+        </div>
+    </div>
+    
+    <!-- Testimony Screen -->
+    <div id="testimonyScreen" class="screen">
+        <div class="header">
+            <h1>Stories of Hope</h1>
+            <p>Real stories of forgiveness and freedom</p>
+        </div>
+        
+        <div class="content">
+            <div class="testimony">
+                <h4>From Betrayal to Breakthrough</h4>
+                <p>"My business partner of 15 years betrayed me, stealing everything we'd built together. I lost my company, my savings, and what I thought was a lifelong friendship. The anger consumed me for two years. I couldn't sleep, couldn't enjoy my family, couldn't move forward.</p>
+                <p>Then I attended a forgiveness seminar at church. The speaker said, 'Unforgiveness is like drinking poison and expecting the other person to die.' That hit me hard. I was destroying myself while he was living his life.</p>
+                <p>Forgiveness didn't happen overnight. It took months of prayer, counseling, and daily choices. But today, I'm free. I've started a new business, my family has their husband and father back, and I can think of him without rage. Forgiveness didn't make what he did okay, but it made me okay."</p>
+                <div class="author">- Michael, 52</div>
+            </div>
+            
+            <div class="testimony">
+                <h4>Forgiving the Unforgivable</h4>
+                <p>"My daughter was killed by a drunk driver. How do you forgive that? For three years, I lived in a dark pit of rage and grief. I wanted the driver to suffer like I was suffering.</p>
+                <p>One day, I felt God asking me, 'Do you want to be right, or do you want to be free?' I realized my unforgiveness wasn't hurting the driver—it was killing me, and dishonoring my daughter's memory.</p>
+                <p>I wrote him a letter in prison, telling him I forgave him. Not because he deserved it, but because I deserved peace. We now correspond regularly. He's become a Christian and speaks to youth about the consequences of drunk driving. God turned our tragedy into testimony."</p>
+                <div class="author">- Susan, 48</div>
+            </div>
+            
+            <div class="testimony">
+                <h4>Family Restoration</h4>
+                <p>"I didn't speak to my father for 12 years. He was absent during my childhood, chose alcohol over family, and missed every important moment of my life. The resentment was a wall between us.</p>
+                <p>When he was diagnosed with cancer, God convicted me. I realized I might lose him forever without reconciliation. Forgiveness felt impossible, but I took one small step—I called him.</p>
+                <p>That conversation led to many more. We cried together, prayed together, and slowly rebuilt. He lived two more years, and they were the best years we ever had. I'm so grateful God gave me the courage to forgive before it was too late."</p>
+                <div class="author">- David, 34</div>
+            </div>
+            
+            <div class="testimony">
+                <h4>Self-Forgiveness Journey</h4>
+                <p>"I had an affair that destroyed my marriage and devastated my children. Even after my wife forgave me and we reconciled, I couldn't forgive myself. I felt I deserved to suffer forever for the pain I caused.</p>
+                <p>A counselor helped me understand that refusing to forgive myself was actually pride—thinking my standards were higher than God's. If the Creator of the universe could forgive me, who was I to refuse?</p>
+                <p>Learning to forgive myself took longer than earning my family's forgiveness. But today, I'm free from shame. I use my story to help other men avoid my mistakes. God really does work all things for good."</p>
+                <div class="author">- James, 41</div>
+            </div>
+            
+            <div class="testimony">
+                <h4>Childhood Wounds Healed</h4>
+                <p>"The abuse I suffered as a child shaped everything about me—my relationships, my self-worth, my ability to trust. For 30 years, I carried hatred for my abuser.</p>
+                <p>In therapy, I learned that forgiveness wasn't saying the abuse was okay or that it didn't matter. Forgiveness was taking back my power, refusing to let the past control my future.</p>
+                <p>I wrote letters I never sent, prayed prayers I didn't feel, and slowly, miraculously, the hatred loosened its grip. I'm not完全 healed yet, but I'm healing. Every day I choose forgiveness, I choose freedom."</p>
+                <div class="author">- Rachel, 42</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Resources Screen -->
+    <div id="resourcesScreen" class="screen">
+        <div class="header">
+            <h1>Resources & Support</h1>
+            <p>Tools for your journey</p>
+        </div>
+        
+        <div class="content">
+            <div class="card">
+                <h3>📖 Key Scriptures on Forgiveness</h3>
+                <div class="resource-list">
+                    <div class="resource-item">
+                        <h4>Matthew 6:14-15</h4>
+                        <p>The connection between forgiving others and receiving forgiveness</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Ephesians 4:31-32</h4>
+                        <p>Getting rid of bitterness and being kind to one another</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Luke 6:37</h4>
+                        <p>Judge not, and you will not be judged</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Mark 11:25</h4>
+                        <p>Forgive so that your Father may forgive you</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>1 John 1:9</h4>
+                        <p>If we confess our sins, He is faithful to forgive</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>📚 Recommended Books</h3>
+                <div class="resource-list">
+                    <div class="resource-item">
+                        <h4>Total Forgiveness - R.T. Kendall</h4>
+                        <p>Biblical principles and practical steps for complete forgiveness</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Forgive and Forget - Lewis Smedes</h4>
+                        <p>Healing the hurts we don't deserve</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>The Book of Forgiving - Desmond Tutu</h4>
+                        <p>The fourfold path for healing ourselves and our world</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Unconditional Forgiveness - Mary Hayes Grieco</h4>
+                        <p>A simple and proven method for inner peace</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🎥 Video Resources</h3>
+                <div class="resource-list">
+                    <div class="resource-item">
+                        <h4>The Power of Forgiveness</h4>
+                        <p>Understanding forgiveness from a biblical perspective</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Forgiveness: Your Health Depends On It</h4>
+                        <p>The physical and emotional benefits of forgiveness</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>How to Forgive When You Don't Feel Like It</h4>
+                        <p>Practical steps when forgiveness feels impossible</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🙏 Prayer Partners</h3>
+                <p>Consider reaching out to:</p>
+                <div class="resource-list">
+                    <div class="resource-item">
+                        <h4>Your Local Church</h4>
+                        <p>Many churches offer prayer teams and support groups</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Christian Counselors</h4>
+                        <p>Professional help with a biblical foundation</p>
+                    </div>
+                    <div class="resource-item">
+                        <h4>Trusted Christian Friends</h4>
+                        <p>Don't journey alone - share with safe people</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="crisis-banner">
+                <h3>Need Immediate Support?</h3>
+                <p>If you are in crisis, please contact your local helpline for immediate support.</p>
+                <button class="btn btn-full" style="background: white; color: var(--primary);">Crisis Resources</button>
+            </div>
+            
+            <div class="card">
+                <h3>💝 Support This Ministry</h3>
+                <p>Help us continue providing free resources for those seeking healing and forgiveness.</p>
+                <button class="btn btn-warning btn-full" onclick="window.open('https://www.paypal.com/donate/?hosted_button_id=8GRE7B8C3TP2U', '_blank')">Donate via PayPal</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>About This App</h2>
+                <button class="modal-close" onclick="closeModal('infoModal')">×</button>
+            </div>
+            
+            <h3>What This App Does</h3>
+            <p>Seventy Times Seven is a comprehensive Christian resource for anyone struggling with forgiveness. Whether you're dealing with deep betrayal, family wounds, or self-forgiveness, this app provides biblical guidance, practical exercises, and daily support for your journey toward freedom.</p>
+            
+            <h3>How to Use This App</h3>
+            <p>1. Start with the Forgiveness Assessment to understand your unique situation<br>
+            2. Read daily devotionals for spiritual nourishment<br>
+            3. Practice forgiveness exercises at your own pace<br>
+            4. Use the prayer journal for personal reflection<br>
+            5. Find encouragement in stories from others who've walked this path<br>
+            6. Access resources for deeper study and support</p>
+            
+            <h3>Install on Your Phone</h3>
+            <p><strong>iPhone:</strong> Tap the Share button → Add to Home Screen<br>
+            <strong>Android:</strong> Tap Menu (3 dots) → Add to Home Screen</p>
+            
+            <p>This creates an app icon on your phone for easy access!</p>
+        </div>
+    </div>
+    
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>About Depths to Heights</h2>
+                <button class="modal-close" onclick="closeModal('aboutModal')">×</button>
+            </div>
+            
+            <h3>Our Mission</h3>
+            <p>Depths to Heights creates grace-filled, biblically-grounded resources for Christians facing life's deepest struggles. We believe that no valley is too deep for God's love to reach, and no mountain too high for His grace to climb.</p>
+            
+            <h3>Created with Love</h3>
+            <p><strong>Made by Justin</strong><br>
+            Depths to Heights Ministry<br>
+            <a href="https://depthstoheights.org" style="color: var(--primary);">depthstoheights.org</a><br>
+            <a href="mailto:depthstoheights@gmail.com" style="color: var(--primary);">depthstoheights@gmail.com</a></p>
+            
+            <h3>Support Our Ministry</h3>
+            <p>Your donations help us create more resources for those struggling with life's challenges. Every gift, no matter the size, makes a difference.</p>
+            
+            <button class="btn btn-warning btn-full" onclick="window.open('https://www.paypal.com/donate/?hosted_button_id=8GRE7B8C3TP2U', '_blank')">Donate via PayPal</button>
+            
+            <h3>Our Other Resources</h3>
+            <p>• The Silent Leader's Battle - Mental health support for ministry leaders<br>
+            • Addictions in the Shadows - Grace-based recovery<br>
+            • Singleness & Sexual Longing - Support for Christian singles</p>
+            
+            <p style="margin-top: 20px; font-style: italic; text-align: center;">
+                "He lifted me out of the slimy pit, out of the mud and mire; he set my feet on a rock and gave me a firm place to stand." - Psalm 40:2
+            </p>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showScreen('homeScreen')">
+            <div class="nav-icon">🏠</div>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item" onclick="showScreen('exerciseScreen')">
+            <div class="nav-icon">💪</div>
+            <span class="nav-label">Exercises</span>
+        </div>
+        <div class="nav-item" onclick="showScreen('resourcesScreen')">
+            <div class="nav-icon">📚</div>
+            <span class="nav-label">Resources</span>
+        </div>
+        <div class="nav-item" onclick="openModal('infoModal')">
+            <div class="nav-icon">ℹ️</div>
+            <span class="nav-label">Info</span>
+        </div>
+        <div class="nav-item" onclick="openModal('aboutModal')">
+            <div class="nav-icon">✨</div>
+            <span class="nav-label">About</span>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize app
+        let appData = {
+            currentDevotional: 1,
+            devotionalsCompleted: [],
+            exercisesCompleted: [],
+            journalEntries: {},
+            assessmentData: {},
+            journeyDay: 1,
+            audioPlaying: false,
+            progress: {
+                devotionals: 0,
+                exercises: 0,
+                journal: 0,
+                prayers: 0
+            }
+        };
+        
+        // Load saved data
+        function loadData() {
+            const saved = localStorage.getItem('forgiveness_app_data');
+            if (saved) {
+                appData = JSON.parse(saved);
+                updateUI();
+            }
+        }
+        
+        // Save data
+        function saveData() {
+            localStorage.setItem('forgiveness_app_data', JSON.stringify(appData));
+        }
+        
+        // Update UI with saved data
+        function updateUI() {
+            // Update progress stats
+            document.getElementById('devotionalCount').textContent = appData.progress.devotionals;
+            document.getElementById('exerciseCount').textContent = appData.progress.exercises;
+            document.getElementById('journalCount').textContent = appData.progress.journal;
+            document.getElementById('prayerCount').textContent = appData.progress.prayers;
+            
+            // Update journey day
+            const daysSinceStart = Math.floor((Date.now() - (appData.startDate || Date.now())) / (1000 * 60 * 60 * 24)) + 1;
+            document.getElementById('journeyDay').textContent = daysSinceStart;
+            
+            // Update progress bar
+            const totalPossible = 20; // 5 devotionals + 4 exercises + journal entries + prayers
+            const totalCompleted = appData.progress.devotionals + appData.progress.exercises + (appData.progress.journal > 0 ? 2 : 0);
+            const progressPercent = Math.round((totalCompleted / totalPossible) * 100);
+            document.getElementById('progressPercent').textContent = progressPercent;
+            document.getElementById('progressFill').style.width = progressPercent + '%';
+            
+            // Load journal entries
+            if (appData.journalEntries) {
+                Object.keys(appData.journalEntries).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = appData.journalEntries[key];
+                    }
+                });
+            }
+            
+            // Show current devotional
+            if (appData.currentDevotional) {
+                showDevotional(appData.currentDevotional);
+            }
+        }
+        
+        // Screen navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Set active nav based on screen
+            if (screenId === 'homeScreen') {
+                document.querySelector('.nav-item').classList.add('active');
+            }
+            
+            window.scrollTo(0, 0);
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // Audio toggle
+        function toggleAudio() {
+            const audio = document.getElementById('bgMusic');
+            const toggle = document.getElementById('audioToggle');
+            const icon = document.getElementById('audioIcon');
+            
+            if (appData.audioPlaying) {
+                audio.pause();
+                toggle.classList.remove('playing');
+                icon.textContent = '♪';
+                appData.audioPlaying = false;
+            } else {
+                // Note: In production, add actual audio file
+                // audio.play();
+                toggle.classList.add('playing');
+                icon.textContent = '♫';
+                appData.audioPlaying = true;
+                showMessage('Background music would play in production version');
+            }
+            saveData();
+        }
+        
+        // Assessment functions
+        function selectOption(element, category) {
+            // Remove selected from siblings
+            element.parentElement.querySelectorAll('.assessment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            // Save selection
+            appData.assessmentData[category] = element.textContent.trim();
+            saveData();
+        }
+        
+        function processAssessment() {
+            const results = document.getElementById('assessmentResults');
+            const summary = document.getElementById('assessmentSummary');
+            
+            // Generate personalized message based on selections
+            let message = "Based on your responses, we see that ";
+            
+            if (appData.assessmentData.struggle) {
+                message += "you're dealing with " + appData.assessmentData.struggle.toLowerCase() + ". ";
+            }
+            
+            if (appData.assessmentData.duration) {
+                message += "You've been carrying this burden for " + appData.assessmentData.duration.toLowerCase() + ", which shows incredible strength. ";
+            }
+            
+            message += "Your personalized path includes daily devotionals focused on your specific needs, practical exercises designed for your situation, and resources tailored to your journey. Remember, healing is a process, not a destination.";
+            
+            summary.textContent = message;
+            results.style.display = 'block';
+            
+            // Update progress
+            if (!appData.assessmentCompleted) {
+                appData.assessmentCompleted = true;
+                saveData();
+            }
+        }
+        
+        // Devotional functions
+        function showDevotional(number) {
+            // Hide all devotionals
+            for (let i = 1; i <= 5; i++) {
+                const dev = document.getElementById('devotional' + i);
+                if (dev) dev.style.display = 'none';
+            }
+            
+            // Show current devotional
+            const current = document.getElementById('devotional' + number);
+            if (current) current.style.display = 'block';
+            
+            // Update navigation buttons
+            document.getElementById('prevDevBtn').style.display = number > 1 ? 'inline-block' : 'none';
+            document.getElementById('nextDevBtn').style.display = number < 5 ? 'inline-block' : 'none';
+            
+            appData.currentDevotional = number;
+            saveData();
+        }
+        
+        function nextDevotional() {
+            if (appData.currentDevotional < 5) {
+                showDevotional(appData.currentDevotional + 1);
+            }
+        }
+        
+        function previousDevotional() {
+            if (appData.currentDevotional > 1) {
+                showDevotional(appData.currentDevotional - 1);
+            }
+        }
+        
+        function completeDevotional(number) {
+            if (!appData.devotionalsCompleted.includes(number)) {
+                appData.devotionalsCompleted.push(number);
+                appData.progress.devotionals++;
+                appData.progress.prayers++; // Each devotional includes a prayer
+                saveData();
+                updateUI();
+                showMessage('Devotional completed! Well done!');
+            }
+        }
+        
+        // Exercise functions
+        function completeExercise(number) {
+            if (!appData.exercisesCompleted.includes(number)) {
+                appData.exercisesCompleted.push(number);
+                appData.progress.exercises++;
+                saveData();
+                updateUI();
+                showMessage('Exercise completed! You\'re making progress!');
+            }
+        }
+        
+        // Journal functions
+        function saveJournal() {
+            const journals = ['journal1', 'journal2', 'journal3', 'journal4', 'journal5'];
+            let hasContent = false;
+            
+            journals.forEach(id => {
+                const element = document.getElementById(id);
+                if (element && element.value.trim()) {
+                    appData.journalEntries[id] = element.value;
+                    hasContent = true;
+                }
+            });
+            
+            if (hasContent && appData.progress.journal === 0) {
+                appData.progress.journal = 1;
+            }
+            
+            saveData();
+            updateUI();
+        }
+        
+        // Show message function
+        function showMessage(text) {
+            // Create message element
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--primary);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 3000;
+                animation: slideDown 0.3s ease;
+            `;
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                message.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => message.remove(), 300);
+            }, 3000);
+        }
+        
+        // Initialize app on load
+        window.addEventListener('load', () => {
+            loadData();
+            
+            // Set start date if not set
+            if (!appData.startDate) {
+                appData.startDate = Date.now();
+                saveData();
+            }
+            
+            // Add CSS animation for messages
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideDown {
+                    from { transform: translate(-50%, -100%); }
+                    to { transform: translate(-50%, 0); }
+                }
+                @keyframes fadeOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+        
+        // Prevent accidental navigation
+        window.addEventListener('beforeunload', (e) => {
+            if (Object.keys(appData.journalEntries).length > 0) {
+                saveJournal();
+            }
+        });
+    </script>
+</body>
+</html>
